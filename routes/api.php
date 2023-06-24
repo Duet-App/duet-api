@@ -22,3 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/tasks/', [TaskController::class, 'getTasks']);
 
 Route::post('/tasks/add', [TaskController::class, 'addTask']);
+
+Route::put('/tasks/{task}/toggle-complete', [TaskController::class, 'toggleComplete']);
+
+Route::get('/tasks/{task}', [TaskController::class, 'show']);
+
+Route::put('/tasks/{task}/edit', [TaskController::class, 'edit']);
+
+Route::delete('/tasks/{task}/delete', [TaskController::class, 'delete']);
