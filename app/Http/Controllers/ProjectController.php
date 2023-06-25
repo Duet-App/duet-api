@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Task;
+use App\Models\Project;
+
+class ProjectController extends Controller
+{
+    public function getProjects() {
+        $projects = Project::all();
+        return ['projects' => $projects];
+    }
+
+    public function create(Request $request) {
+        Project::create([
+            'title' => $request->title,
+            'description' => $request->description
+        ]);
+
+        return ['success' => '1'];
+    }
+
+    public function show(Project $project) {
+        $project = Project::with('tasks')->find($project->id);
+        return ['project' => $project];
+    }
+
+    public function moveTaskToProject(Task $task, Project $project) {
+        $task->project_id = $project->id;
+        $task->save();
+        return ['success' => '1'];
+    }
+
+    public function addTaskToProject(Request $request, Project $project) {
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'project_id' => $project->id
+        ]);
+        return ['success' => '1'];
+    }
+
+    public function edit(Project $project, Request $request) {
+        if($request->title)
+            $project->title = $request->title;
+        if($request->description)
+            $project->description = $request->description;
+        $project->save();
+        return ['success' => '1'];
+    }
+}
