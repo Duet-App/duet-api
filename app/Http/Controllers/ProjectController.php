@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProjectController extends Controller
 {
     public function getProjects() {
-        $projects = Project::all();
+        $projects = Project::withCount([
+            'tasks',
+            'tasks as completed_tasks' => function (Builder $query) {
+                $query->where('is_complete', true);
+            }
+        ])->get();
         return ['projects' => $projects];
     }
 
