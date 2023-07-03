@@ -36,6 +36,8 @@ Route::get('/tasks/{task}', [TaskController::class, 'show']);
 
 Route::put('/tasks/{task}/edit', [TaskController::class, 'edit']);
 
+Route::put('/tasks/{task}/schedule-on', [TaskController::class, 'scheduleOn']);
+
 Route::delete('/tasks/{task}/delete', [TaskController::class, 'delete']);
 
 Route::get('/projects/', [ProjectController::class, 'getProjects']);

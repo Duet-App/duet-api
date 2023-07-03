@@ -56,6 +56,12 @@ class TaskController extends Controller
         return ['success' => '1'];
     }
 
+    public function scheduleOn(Task $task, Request $request) {
+        $task->scheduled_date = $request->scheduledDate;
+        $task->save();
+        return ['success' => '1'];
+    }
+
     public function edit(Task $task, Request $request) {
         if($request->title)
             $task->title = $request->title;
