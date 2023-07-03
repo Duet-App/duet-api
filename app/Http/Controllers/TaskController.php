@@ -13,7 +13,7 @@ class TaskController extends Controller
     }
 
     public function getInboxTasks() {
-        $tasks = Task::where('project_id', null)->where('is_complete', false)->where('is_today', false)->get();
+        $tasks = Task::where('project_id', null)->where('is_today', false)->get();
         return ['tasks' => $tasks];
     }
 
