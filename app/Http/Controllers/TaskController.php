@@ -47,8 +47,8 @@ class TaskController extends Controller
         Task::create([
             'title' => $request->title,
             'description' => $request->description,
-            'is_today' => 1,
             'scheduled_date' => $request->scheduledDate,
+            'due_date' => $request->dueDate,
             'user_id' => $request->user()->id,
         ]);
         return ['success' => '1'];
@@ -77,6 +77,10 @@ class TaskController extends Controller
             $task->title = $request->title;
         if($request->description)
             $task->description = $request->description;
+        if($request->scheduledDate)
+            $task->scheduled_date = $request->scheduledDate;
+        if($request->dueDate)
+            $task->due_date = $request->dueDate;
         $task->save();
         return ['success' => '1'];
     }

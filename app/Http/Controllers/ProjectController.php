@@ -45,6 +45,7 @@ class ProjectController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'scheduled_date' => $request->scheduledDate,
+            'due_date' => $request->dueDate,
             'user_id' => auth()->user()->id,
             'project_id' => $project->id
         ]);
