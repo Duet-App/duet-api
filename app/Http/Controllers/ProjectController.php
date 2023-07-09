@@ -44,6 +44,7 @@ class ProjectController extends Controller
         Task::create([
             'title' => $request->title,
             'description' => $request->description,
+            'scheduled_date' => $request->scheduledDate,
             'project_id' => $project->id
         ]);
         return ['success' => '1'];
