@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ProjectController extends Controller
 {
     public function getProjects() {
-        $projects = Project::withCount([
+        $projects = auth()->user()->projects()->withCount([
             'tasks',
             'tasks as completed_tasks' => function (Builder $query) {
                 $query->where('is_complete', true);
@@ -22,7 +22,8 @@ class ProjectController extends Controller
     public function create(Request $request) {
         Project::create([
             'title' => $request->title,
-            'description' => $request->description
+            'description' => $request->description,
+            'user_id' => $request->user()->id,
         ]);
 
         return ['success' => '1'];
