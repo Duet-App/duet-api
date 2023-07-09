@@ -4,21 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Database\Eloquent\Builder;
 
 class TaskController extends Controller
 {
     public function getTasks() {
-        $tasks = Task::all();
+        $tasks = auth()->user()->tasks()->get();
         return ['tasks' => $tasks];
     }
 
     public function getInboxTasks() {
-        $tasks = Task::where('project_id', null)->where('is_today', false)->get();
+        $tasks = auth()->user()->tasks()->where('project_id', null)->where('is_today', false)->get();
         return ['tasks' => $tasks];
     }
 
     public function getTodayTasks() {
-        $tasks = Task::where('is_today', true)->where('is_complete', false)->with('project')->get();
+        $tasks = auth()->user()->tasks()
+            ->where(function (Builder $query) {
+                return $query->where('is_today', true)
+                             ->orWhereNotNull('scheduled_date');
+            })
+            ->where('is_complete', false)
+            ->with('project')->get();
         return ['tasks' => $tasks];
     }
 
@@ -30,6 +37,7 @@ class TaskController extends Controller
         Task::create([
             'title' => $request->title,
             'description' => $request->description,
+            'user_id' => $request->user()->id,
         ]);
 
         return ['success' => '1'];
@@ -39,7 +47,8 @@ class TaskController extends Controller
         Task::create([
             'title' => $request->title,
             'description' => $request->description,
-            'is_today' => 1
+            'is_today' => 1,
+            'user_id' => $request->user()->id,
         ]);
         return ['success' => '1'];
     }
