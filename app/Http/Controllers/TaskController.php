@@ -29,7 +29,8 @@ class TaskController extends Controller
         return ['tasks' => $tasks];
     }
 
-    public function show(Task $task) {
+    public function show($id) {
+        $task = Task::with('project')->find($id);
         return ['task' => $task];
     }
 
