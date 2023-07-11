@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class TaskController extends Controller
 {
@@ -56,6 +57,9 @@ class TaskController extends Controller
     }
 
     public function toggleComplete(Task $task, Request $request) {
+        if($task->is_complete == 0) {
+            $task->completed_on = Carbon::now();
+        }
         $task->is_complete = ($task->is_complete == 1) ? 0 : 1;
         $task->save();
         return ['success' => '1'];
