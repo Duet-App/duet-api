@@ -72,6 +72,12 @@ class TaskController extends Controller
         return ['success' => '1'];
     }
 
+    public function setPriority(Task $task, Request $request) {
+        $task->priority = $request->priority;
+        $task->save();
+        return ['success' => '1'];
+    }
+
     public function edit(Task $task, Request $request) {
         if($request->title)
             $task->title = $request->title;

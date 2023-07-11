@@ -43,6 +43,8 @@ Route::put('/tasks/{task}/edit', [TaskController::class, 'edit'])->middleware('a
 
 Route::put('/tasks/{task}/schedule-on', [TaskController::class, 'scheduleOn'])->middleware('auth:sanctum');
 
+Route::put('/tasks/{task}/set-priority', [TaskController::class, 'setPriority'])->middleware('auth:sanctum');
+
 Route::delete('/tasks/{task}/delete', [TaskController::class, 'delete'])->middleware('auth:sanctum');
 
 Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum');
