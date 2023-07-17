@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Subtask;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
@@ -99,5 +100,20 @@ class TaskController extends Controller
     public function delete(Task $task) {
         $task->delete();
         return ['success' => '1'];
+    }
+
+    public function addSubtask(Task $task, Request $request) {
+        $maxCount = $task->subtasks()->max('order') + 1;
+        Subtask::create([
+            'title' => $request->title,
+            'order' => $maxCount,
+            'task_id' => $task->id,
+            'user_id' => auth()->user()->id
+        ]);
+        return ['success' => '1'];
+    }
+
+    public function fetchSubtasks(Task $task, Request $request) {
+        return ['subtasks' => $task->subtasks()->get()];
     }
 }
