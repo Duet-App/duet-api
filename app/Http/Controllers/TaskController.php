@@ -31,7 +31,7 @@ class TaskController extends Controller
     }
 
     public function show($id) {
-        $task = Task::with('project')->find($id);
+        $task = Task::with(['project', 'subtasks'])->find($id);
         return ['task' => $task];
     }
 
