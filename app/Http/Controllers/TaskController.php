@@ -132,5 +132,10 @@ class TaskController extends Controller
         });
         return ['success' => '1'];
     }
+
+    public function toggleCompleteSubtask(Task $task, Subtask $subtask) {
+        $subtask->is_complete = ($subtask->is_complete == 1) ? 0 : 1;
+        $subtask->save();
+        return ['success' => '1'];
     }
 }
