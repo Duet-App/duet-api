@@ -32,7 +32,11 @@ class TaskController extends Controller
     }
 
     public function show($id) {
-        $task = Task::with(['project', 'subtasks'])->find($id);
+        $task = Task::with(
+            ['project', 'subtasks' => function($q) {
+                $q->orderBy('order', 'asc');
+            }]
+        )->find($id);
         return ['task' => $task];
     }
 
@@ -114,6 +118,7 @@ class TaskController extends Controller
     }
 
     public function fetchSubtasks(Task $task, Request $request) {
-        return ['subtasks' => $task->subtasks()->get()];
+        return ['subtasks' => $task->subtasks()->orderBy('order', 'asc')->get()];
+    }
     }
 }
