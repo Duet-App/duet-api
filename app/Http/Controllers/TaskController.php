@@ -120,5 +120,17 @@ class TaskController extends Controller
     public function fetchSubtasks(Task $task, Request $request) {
         return ['subtasks' => $task->subtasks()->orderBy('order', 'asc')->get()];
     }
+
+    public function reorderSubtasks(Task $task, Request $request) {
+        $subtasks = $task->subtasks()->get()->sortBy('order');
+        $from = $request->from;
+        $to = $request->to;
+        $subtasks->splice($to, 0, $subtasks->splice($from, 1));
+        $subtasks->each(function ($item, $key) {
+            $item->order = $key + 1;
+            $item->save();
+        });
+        return ['success' => '1'];
+    }
     }
 }

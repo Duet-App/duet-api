@@ -51,6 +51,8 @@ Route::post('/tasks/{task}/add-subtask', [TaskController::class, 'addSubtask'])-
 
 Route::get('/tasks/{task}/subtasks', [TaskController::class, 'fetchSubtasks'])->middleware('auth:sanctum');
 
+Route::post('/tasks/{task}/subtasks/reorder', [TaskController::class, 'reorderSubtasks'])->middleware('auth:sanctum');
+
 Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum');
 
 Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('auth:sanctum');
