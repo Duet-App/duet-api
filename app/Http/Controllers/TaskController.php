@@ -138,4 +138,10 @@ class TaskController extends Controller
         $subtask->save();
         return ['success' => '1'];
     }
+    
+    public function updateSubtask(Task $task, Subtask $subtask, Request $request) {
+        $subtask->title = $request->title;
+        $subtask->save();
+        return ['success' => '1'];
+    }
 }
