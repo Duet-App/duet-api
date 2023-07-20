@@ -57,6 +57,8 @@ Route::put('/tasks/{task}/subtasks/{subtask}/toggle-complete', [TaskController::
 
 Route::put('/tasks/{task}/subtasks/{subtask}/edit', [TaskController::class, 'updateSubtask'])->middleware('auth:sanctum');
 
+Route::delete('/tasks/{task}/subtasks/{subtask}/delete', [TaskController::class, 'deleteSubtask'])->middleware('auth:sanctum');
+
 Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum');
 
 Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('auth:sanctum');

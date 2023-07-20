@@ -144,4 +144,9 @@ class TaskController extends Controller
         $subtask->save();
         return ['success' => '1'];
     }
+
+    public function deleteSubtask(Task $task, Subtask $subtask) {
+        $subtask->delete();
+        return ['subtasks' => $task->subtasks()->get()];
+    }
 }
