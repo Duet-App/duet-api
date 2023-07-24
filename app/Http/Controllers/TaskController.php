@@ -16,15 +16,20 @@ class TaskController extends Controller
     }
 
     public function getInboxTasks() {
-        $tasks = auth()->user()->tasks()->where('project_id', null)->where('is_today', false)->get();
+        $tasks = auth()->user()->tasks()->where('project_id', null)->where(
+            function(Builder $query) {
+                return $query->where('is_today', false)
+                             ->orWhere('status', 'T');
+            }
+        )->get();
         return ['tasks' => $tasks];
     }
 
     public function getTodayTasks() {
         $tasks = auth()->user()->tasks()
             ->where(function (Builder $query) {
-                return $query->where('is_today', true)
-                             ->orWhereNotNull('scheduled_date');
+                return $query->where('status', 'N')
+                             ->orWhere('status', 'W');
             })
             ->where('is_complete', false)
             ->with('project')->get();
@@ -84,6 +89,15 @@ class TaskController extends Controller
 
     public function setPriority(Task $task, Request $request) {
         $task->priority = $request->priority;
+        $task->save();
+        return ['success' => '1'];
+    }
+
+    public function changeTaskStatus(Task $task, Request $request) {
+        $task->status = $request->status;
+        if($request->status == "C" || $request->status == "D") {
+            $task->completed_on = Carbon::now();
+        }
         $task->save();
         return ['success' => '1'];
     }
