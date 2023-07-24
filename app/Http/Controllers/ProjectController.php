@@ -13,7 +13,7 @@ class ProjectController extends Controller
         $projects = auth()->user()->projects()->withCount([
             'tasks',
             'tasks as completed_tasks' => function (Builder $query) {
-                $query->where('is_complete', true);
+                $query->where('status', 'C')->orWhere('status', 'D');
             }
         ])->get();
         return ['projects' => $projects];
