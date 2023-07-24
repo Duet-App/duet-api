@@ -61,6 +61,7 @@ class TaskController extends Controller
             'description' => $request->description,
             'scheduled_date' => $request->scheduledDate,
             'due_date' => $request->dueDate,
+            'status' => "N",
             'user_id' => $request->user()->id,
         ]);
         return ['success' => '1'];
