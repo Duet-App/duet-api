@@ -42,7 +42,7 @@ class ProjectController extends Controller
     }
 
     public function addTaskToProject(Request $request, Project $project) {
-        Task::create([
+        $addedTask = Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'scheduled_date' => $request->scheduledDate,
@@ -50,7 +50,8 @@ class ProjectController extends Controller
             'user_id' => auth()->user()->id,
             'project_id' => $project->id
         ]);
-        return ['success' => '1'];
+        $task = Task::find($addedTask->id);
+        return ['task' => $task];
     }
 
     public function edit(Project $project, Request $request) {
