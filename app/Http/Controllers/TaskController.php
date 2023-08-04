@@ -11,7 +11,9 @@ use Illuminate\Support\Carbon;
 class TaskController extends Controller
 {
     public function getTasks() {
-        $tasks = auth()->user()->tasks()->get();
+        $tasks = auth()->user()->tasks()->with(['project', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->get();
         return ['tasks' => $tasks];
     }
 
@@ -46,17 +48,17 @@ class TaskController extends Controller
     }
 
     public function addTask(Request $request) {
-        Task::create([
+        $addedTask = Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => $request->user()->id,
         ]);
-
-        return ['success' => '1'];
+        $task = Task::find($addedTask->id);
+        return ['task' => $task];
     }
 
     public function addTaskToToday(Request $request, Task $task) {
-        Task::create([
+        $addedTask = Task::create([
             'title' => $request->title,
             'description' => $request->description,
             'scheduled_date' => $request->scheduledDate,
@@ -64,7 +66,8 @@ class TaskController extends Controller
             'status' => "N",
             'user_id' => $request->user()->id,
         ]);
-        return ['success' => '1'];
+        $task = Task::find($addedTask->id);
+        return ['task' => $task];
     }
 
     public function toggleComplete(Task $task, Request $request) {
@@ -123,13 +126,14 @@ class TaskController extends Controller
 
     public function addSubtask(Task $task, Request $request) {
         $maxCount = $task->subtasks()->max('order') + 1;
-        Subtask::create([
+        $addedSubtask = Subtask::create([
             'title' => $request->title,
             'order' => $maxCount,
             'task_id' => $task->id,
             'user_id' => auth()->user()->id
         ]);
-        return ['success' => '1'];
+        $subtask = $task->subtasks()->find($addedSubtask->id);
+        return ['subtask' => $subtask];
     }
 
     public function fetchSubtasks(Task $task, Request $request) {
@@ -145,7 +149,7 @@ class TaskController extends Controller
             $item->order = $key + 1;
             $item->save();
         });
-        return ['success' => '1'];
+        return ['subtasks' => $task->subtasks()->orderBy('order', 'asc')->get()];
     }
 
     public function toggleCompleteSubtask(Task $task, Subtask $subtask) {
@@ -153,7 +157,7 @@ class TaskController extends Controller
         $subtask->save();
         return ['success' => '1'];
     }
-    
+
     public function updateSubtask(Task $task, Subtask $subtask, Request $request) {
         $subtask->title = $request->title;
         $subtask->save();
