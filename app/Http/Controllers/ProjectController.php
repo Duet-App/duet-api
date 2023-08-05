@@ -50,7 +50,9 @@ class ProjectController extends Controller
             'user_id' => auth()->user()->id,
             'project_id' => $project->id
         ]);
-        $task = Task::find($addedTask->id);
+        $task = Task::where('id', $addedTask->id)->with(['project', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->first();
         return ['task' => $task];
     }
 
