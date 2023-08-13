@@ -97,6 +97,12 @@ class TaskController extends Controller
         return ['success' => '1'];
     }
 
+    public function setDue(Task $task, Request $request) {
+        $task->due_date = $request->dueDate;
+        $task->save();
+        return ['success' => '1'];
+    }
+
     public function changeTaskStatus(Task $task, Request $request) {
         $task->status = $request->status;
         if($request->status == "C" || $request->status == "D") {

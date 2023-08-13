@@ -45,6 +45,8 @@ Route::put('/tasks/{task}/schedule-on', [TaskController::class, 'scheduleOn'])->
 
 Route::put('/tasks/{task}/set-priority', [TaskController::class, 'setPriority'])->middleware('auth:sanctum');
 
+Route::put('/tasks/{task}/set-due', [TaskController::class, 'setDue'])->middleware('auth:sanctum');
+
 Route::put('/tasks/{task}/change-status', [TaskController::class, 'changeTaskStatus'])->middleware('auth:sanctum');
 
 Route::delete('/tasks/{task}/delete', [TaskController::class, 'delete'])->middleware('auth:sanctum');
