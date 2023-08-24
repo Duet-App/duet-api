@@ -53,4 +53,8 @@ class User extends Authenticatable
     public function subtasks() {
         return $this->hasMany(Subtask::class);
     }
+
+    public function tags() {
+        return $this->hasMany(Tag::class);
+    }
 }

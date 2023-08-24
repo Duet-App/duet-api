@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Tag;
 use App\Models\Subtask;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -11,7 +12,7 @@ use Illuminate\Support\Carbon;
 class TaskController extends Controller
 {
     public function getTasks() {
-        $tasks = auth()->user()->tasks()->with(['project', 'subtasks' => function($q) {
+        $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
             $q->orderBy('order', 'asc');
         }])->get();
         return ['tasks' => $tasks];
@@ -40,7 +41,7 @@ class TaskController extends Controller
 
     public function show($id) {
         $task = Task::with(
-            ['project', 'subtasks' => function($q) {
+            ['project', 'tags', 'subtasks' => function($q) {
                 $q->orderBy('order', 'asc');
             }]
         )->find($id);
@@ -173,5 +174,17 @@ class TaskController extends Controller
     public function deleteSubtask(Task $task, Subtask $subtask) {
         $subtask->delete();
         return ['subtasks' => $task->subtasks()->get()];
+    }
+
+    public function addTagsToTask(Request $request) {
+        $task = Task::find($request->task_id);
+        $task->tags()->detach();
+        $task->tags()->attach($request->tag_id);
+        $task = Task::with(
+            ['project', 'tags', 'subtasks' => function($q) {
+                $q->orderBy('order', 'asc');
+            }]
+        )->find($request->task_id);
+        return ['tags' => $task->tags()->get()];
     }
 }

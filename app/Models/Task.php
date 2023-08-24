@@ -18,6 +18,10 @@ class Task extends Model
         return $this->hasMany(Subtask::class);
     }
 
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

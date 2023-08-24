@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,4 +76,10 @@ Route::post('/projects/{project}/add-task-to-project', [ProjectController::class
 
 Route::put('/projects/{project}/edit', [ProjectController::class, 'edit'])->middleware('auth:sanctum');
 
-Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum')->middleware('auth:sanctum');
+Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum');
+
+Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum');
+
+Route::post('/tags/add', [TagController::class, 'add'])->middleware('auth:sanctum');
+
+Route::post('/tags/add-to-task', [TaskController::class, 'addTagsToTask'])->middleware('auth:sanctum');
