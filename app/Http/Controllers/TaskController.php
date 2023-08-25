@@ -54,7 +54,11 @@ class TaskController extends Controller
             'description' => $request->description,
             'user_id' => $request->user()->id,
         ]);
-        $task = Task::find($addedTask->id);
+        $task = Task::with(
+            ['project', 'tags', 'subtasks' => function($q) {
+                $q->orderBy('order', 'asc');
+            }]
+        )->find($addedTask->id);
         return ['task' => $task];
     }
 
@@ -67,7 +71,11 @@ class TaskController extends Controller
             'status' => "N",
             'user_id' => $request->user()->id,
         ]);
-        $task = Task::find($addedTask->id);
+        $task = Task::with(
+            ['project', 'tags', 'subtasks' => function($q) {
+                $q->orderBy('order', 'asc');
+            }]
+        )->find($addedTask->id);
         return ['task' => $task];
     }
 
