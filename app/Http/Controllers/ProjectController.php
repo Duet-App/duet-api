@@ -20,13 +20,20 @@ class ProjectController extends Controller
     }
 
     public function create(Request $request) {
-        Project::create([
+        $addedProject = Project::create([
             'title' => $request->title,
             'description' => $request->description,
             'user_id' => $request->user()->id,
         ]);
 
-        return ['success' => '1'];
+        $project = Project::withCount([
+            'tasks',
+            'tasks as completed_tasks' => function (Builder $query) {
+                $query->where('status', 'C')->orWhere('status', 'D');
+            }
+        ])->find($addedProject->id);
+
+        return ['project' => $project];
     }
 
     public function show(Project $project) {
