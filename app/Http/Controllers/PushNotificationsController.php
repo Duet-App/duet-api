@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\TaskReminder;
 
 class PushNotificationsController extends Controller
 {
@@ -22,6 +23,6 @@ class PushNotificationsController extends Controller
     }
 
     public function send(Request $request) {
-        Notification::send(auth()->user(), new TaskReminder)
+        Notification::send(auth()->user(), new TaskReminder);
     }
 }
