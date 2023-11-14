@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\PushNotificationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,3 +84,7 @@ Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum'
 Route::post('/tags/add', [TagController::class, 'add'])->middleware('auth:sanctum');
 
 Route::post('/tags/add-to-task', [TaskController::class, 'addTagsToTask'])->middleware('auth:sanctum');
+
+Route::post('/subscribe-to-push', [PushNotificationsController::class, 'store'])->middleware('auth:sanctum');
+
+Route::get('/schedule-notification', [PushNotificationsController::class, 'send'])->middleware('auth:sanctum');
