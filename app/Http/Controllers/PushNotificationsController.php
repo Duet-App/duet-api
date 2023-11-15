@@ -19,7 +19,7 @@ class PushNotificationsController extends Controller
         $key = $request->keys['p256dh'];
         auth()->user()->updatePushSubscription($endpoint, $key, $token);
 
-        return response()->json(['success' => true],200);
+        return ['success' => true];
     }
 
     public function send(Request $request) {
