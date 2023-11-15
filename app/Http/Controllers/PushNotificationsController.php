@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\TaskReminder;
-use Notification;
+// use Notification;
 
 class PushNotificationsController extends Controller
 {
@@ -27,8 +27,8 @@ class PushNotificationsController extends Controller
     }
 
     public function send(Request $request) {
-        // Notification::send(auth()->user(), new TaskReminder);
-        auth()->user()->notify(new TaskReminder);
+        Notification::send(auth()->user(), new TaskReminder());
+        // auth()->user()->notify(new TaskReminder());
         return ['success' => true];
     }
 }

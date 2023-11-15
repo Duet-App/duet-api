@@ -35,12 +35,12 @@ class TaskReminder extends Notification
         return [WebPushChannel::class];
     }
 
-    public function toWebPush($notifiable, $notification)
+    public function toWebPush($notifiable)
     {
-        return (new WebPushMessage)
+        return (new WebPushMessage())
             ->title('Task reminder')
-            ->body('Push notification seems to be working')
-            ->options(['TTL' => 1000]);
+            ->body('Push notification seems to be working');
+            // ->options(['TTL' => 1000]);
             // ->data(['id' => $notification->id])
             // ->badge()
             // ->dir()
