@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\TaskReminder;
+use Notification;
 
 class PushNotificationsController extends Controller
 {
-    use Notifiable;
+    // use Notifiable;
 
     public function store(Request $request) {
         $this->validate($request,[
