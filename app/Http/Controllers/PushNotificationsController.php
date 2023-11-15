@@ -24,5 +24,6 @@ class PushNotificationsController extends Controller
 
     public function send(Request $request) {
         Notification::send(auth()->user(), new TaskReminder);
+        return ['success' => true];
     }
 }
