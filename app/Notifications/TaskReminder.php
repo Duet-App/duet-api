@@ -11,7 +11,7 @@ use NotificationChannels\WebPush\WebPushChannel;
 
 class TaskReminder extends Notification
 {
-    use Queueable;
+    //use Queueable;
 
     /**
      * Create a new notification instance.
@@ -33,19 +33,6 @@ class TaskReminder extends Notification
     {
         // return ['mail'];
         return [WebPushChannel::class];
-    }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 
     public function toWebPush($notifiable, $notification)
