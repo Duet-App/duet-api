@@ -76,6 +76,10 @@ Route::post('/projects/{project}/add-task-to-project', [ProjectController::class
 
 Route::put('/projects/{project}/edit', [ProjectController::class, 'edit'])->middleware('auth:sanctum');
 
+Route::post('/projects/{project}/complete', [ProjectController::class, 'toggleAsComplete'])->middleware('auth:sanctum');
+
+Route::post('/projects/{project}/archive', [ProjectController::class, 'toggleArchive'])->middleware('auth:sanctum');
+
 Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum');
 
 Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum');

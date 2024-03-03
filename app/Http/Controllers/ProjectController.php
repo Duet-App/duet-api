@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class ProjectController extends Controller
 {
@@ -68,6 +69,24 @@ class ProjectController extends Controller
             $project->title = $request->title;
         if($request->description)
             $project->description = $request->description;
+        $project->save();
+        return ['success' => '1'];
+    }
+
+    public function toggleAsComplete(Project $project, Request $request) {
+        if($project->isComplete == 0) {
+            $project->completed_on = Carbon::now();
+        }
+        $project->isComplete = ($project->isComplete == 1) ? 0 : 1;
+        $project->save();
+        return ['success' => '1'];
+    }
+
+    public function toggleArchive(Project $project, Request $request) {
+        if($project->is_archived == 0) {
+            $project->archived_on = Carbon::now();
+        }
+        $project->is_archived = ($project->is_archived == 1) ? 0 : 1;
         $project->save();
         return ['success' => '1'];
     }
