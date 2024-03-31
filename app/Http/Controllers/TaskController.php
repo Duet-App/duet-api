@@ -118,7 +118,8 @@ class TaskController extends Controller
             $task->completed_on = Carbon::now();
         }
         $task->save();
-        return ['success' => '1'];
+        $task->refresh();
+        return ['success' => '1', 'task' => $task];
     }
 
     public function edit(Task $task, Request $request) {
