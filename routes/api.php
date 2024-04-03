@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\TagController;
 
 /*
@@ -87,3 +88,13 @@ Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum'
 Route::post('/tags/add', [TagController::class, 'add'])->middleware('auth:sanctum');
 
 Route::post('/tags/add-to-task', [TaskController::class, 'addTagsToTask'])->middleware('auth:sanctum');
+
+Route::get('/notes/', [NoteController::class, 'getNotes'])->middleware('auth:sanctum');
+
+Route::post('/notes/add', [NoteController::class, 'create'])->middleware('auth:sanctum');
+
+Route::put('/notes/{note}/edit', [NoteController::class, 'edit'])->middleware('auth:sanctum');
+
+Route::post('/projects/{project}/note/add-to-project', [NoteController::class, 'addToProject'])->middleware('auth:sanctum');
+
+Route::put('/notes/{note}/move-to-project', [NoteController::class, 'moveToProject'])->middleware('auth:sanctum');

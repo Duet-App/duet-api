@@ -16,7 +16,7 @@ class ProjectController extends Controller
             'tasks as completed_tasks' => function (Builder $query) {
                 $query->where('status', 'C')->orWhere('status', 'D');
             }
-        ])->get();
+        ])->with(['notes'])->get();
         return ['projects' => $projects];
     }
 
