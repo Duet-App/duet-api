@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/tasks/', [TaskController::class, 'getTasks'])->middleware('auth:sanctum');
+Route::get('/tasks/', [TaskController::class, 'getTasks'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::get('/tasks/inbox', [TaskController::class, 'getInboxTasks'])->middleware('auth:sanctum');
 
