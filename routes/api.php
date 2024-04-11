@@ -39,7 +39,7 @@ Route::post('/tasks/add-task-to-today', [TaskController::class, 'addTaskToToday'
 
 Route::put('/tasks/{task}/toggle-complete', [TaskController::class, 'toggleComplete'])->middleware('auth:sanctum');
 
-Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::put('/tasks/{task}/edit', [TaskController::class, 'edit'])->middleware('auth:sanctum');
 
@@ -65,11 +65,11 @@ Route::put('/tasks/{task}/subtasks/{subtask}/edit', [TaskController::class, 'upd
 
 Route::delete('/tasks/{task}/subtasks/{subtask}/delete', [TaskController::class, 'deleteSubtask'])->middleware('auth:sanctum');
 
-Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum');
+Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('auth:sanctum');
 
-Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::put('/tasks/{task}/move-to-project/{project}', [ProjectController::class, 'moveTaskToProject'])->middleware('auth:sanctum');
 
@@ -83,7 +83,7 @@ Route::post('/projects/{project}/archive', [ProjectController::class, 'toggleArc
 
 Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum');
 
-Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/tags/add', [TagController::class, 'add'])->middleware('auth:sanctum');
 
