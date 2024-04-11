@@ -89,7 +89,9 @@ Route::post('/tags/add', [TagController::class, 'add'])->middleware('auth:sanctu
 
 Route::post('/tags/add-to-task', [TaskController::class, 'addTagsToTask'])->middleware('auth:sanctum');
 
-Route::get('/notes/', [NoteController::class, 'getNotes'])->middleware('auth:sanctum');
+Route::get('/notes/', [NoteController::class, 'getNotes'])->middleware('auth:sanctum')->middleware('etag');
+
+Route::get('/notes/{note}', [NoteController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/notes/add', [NoteController::class, 'create'])->middleware('auth:sanctum');
 
