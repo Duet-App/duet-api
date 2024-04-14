@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/tasks/', [TaskController::class, 'getTasks'])->middleware('auth:sanctum')->middleware('etag');
 
-Route::get('/tasks/inbox', [TaskController::class, 'getInboxTasks'])->middleware('auth:sanctum');
+Route::get('/tasks/inbox', [TaskController::class, 'getInboxTasks'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::get('/tasks/today', [TaskController::class, 'getTodayTasks'])->middleware('auth:sanctum');
 
