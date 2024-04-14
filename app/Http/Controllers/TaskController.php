@@ -19,12 +19,14 @@ class TaskController extends Controller
     }
 
     public function getInboxTasks() {
-        $tasks = auth()->user()->tasks()->where('project_id', null)->where(
-            function(Builder $query) {
-                return $query->where('is_today', false)
-                             ->orWhere('status', 'T');
-            }
-        )->get();
+        $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->where('project_id', null)->where(
+            // function(Builder $query) {
+            //     return $query->where('is_today', false)
+            //                  ->orWhere('status', 'T');
+            // }
+        'status', 'T')->where('is_complete', 0)->get();
         return ['tasks' => $tasks];
     }
 
