@@ -31,13 +31,13 @@ class TaskController extends Controller
     }
 
     public function getTodayTasks() {
-        $tasks = auth()->user()->tasks()
-            ->where(function (Builder $query) {
+        $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->where(function (Builder $query) {
                 return $query->where('status', 'N')
                              ->orWhere('status', 'W');
             })
-            ->where('is_complete', false)
-            ->with('project')->get();
+            ->where('is_complete', false)->get();
         return ['tasks' => $tasks];
     }
 
