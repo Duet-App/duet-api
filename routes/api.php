@@ -39,6 +39,8 @@ Route::post('/tasks/add-task-to-today', [TaskController::class, 'addTaskToToday'
 
 Route::put('/tasks/{task}/toggle-complete', [TaskController::class, 'toggleComplete'])->middleware('auth:sanctum');
 
+Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum');
+
 Route::get('/tasks/{task}', [TaskController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::put('/tasks/{task}/edit', [TaskController::class, 'edit'])->middleware('auth:sanctum');
