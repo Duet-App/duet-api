@@ -33,8 +33,8 @@ class TaskController extends Controller
     public function getNextActions() {
         $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
             $q->orderBy('order', 'asc');
-        }])->where('status', 'N')
-            ->where('is_complete', false)->get();
+        }])->where('status', 'N')->get();
+            // ->where('is_complete', false)->get();
         return ['tasks' => $tasks];
     }
 
