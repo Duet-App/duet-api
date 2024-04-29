@@ -30,13 +30,27 @@ class TaskController extends Controller
         return ['tasks' => $tasks];
     }
 
+    public function getNextActions() {
+        $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->where('status', 'N')
+            ->where('is_complete', false)->get();
+        return ['tasks' => $tasks];
+    }
+
     public function getTodayTasks() {
         $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
             $q->orderBy('order', 'asc');
-        }])->where(function (Builder $query) {
-                return $query->where('status', 'N')
-                             ->orWhere('status', 'W');
-            })
+        }])->where('status', 'N')
+            ->where('is_today', true)
+            ->where('is_complete', false)->get();
+        return ['tasks' => $tasks];
+    }
+
+    public function getWaitingTasks() {
+        $tasks = auth()->user()->tasks()->with(['project', 'tags', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->where('status', 'W')
             ->where('is_complete', false)->get();
         return ['tasks' => $tasks];
     }
