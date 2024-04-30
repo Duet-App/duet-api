@@ -20,6 +20,16 @@ class ProjectController extends Controller
         return ['projects' => $projects];
     }
 
+    public function getDashboardProjects() {
+        $projects = auth()->user()->projects()->withCount([
+            'tasks',
+            'tasks as completed_tasks' => function (Builder $query) {
+                $query->where('status', 'C')->orWhere('status', 'D');
+            }
+        ])->orderBy('updated_at', 'desc')->take(3)->get();
+        return ['projects' => $projects];
+    }
+
     public function create(Request $request) {
         $addedProject = Project::create([
             'title' => $request->title,
