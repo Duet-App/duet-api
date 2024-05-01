@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Project;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class ProjectController extends Controller
@@ -48,7 +48,9 @@ class ProjectController extends Controller
     }
 
     public function show(Project $project) {
-        $project = Project::with(['tasks.tags', 'notes'])->find($project->id);
+        $project = Project::with(['tasks' => function (Builder $query) {
+            $query->where('status', 'T')->orWhere('status', 'N')->orWhere('status', 'W')->orderBy('created_at', 'desc');
+        }, 'tasks.tags', 'notes'])->find($project->id);
         // $project = Project::find($project->id);
         return ['project' => $project];
     }
