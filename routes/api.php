@@ -79,6 +79,8 @@ Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('
 
 Route::get('/projects/{project}', [ProjectController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
+Route::get('/projects/{project}/completed-tasks', [ProjectController::class, 'fetchCompletedTasks'])->middleware('auth:sanctum')->middleware('etag');
+
 Route::put('/tasks/{task}/move-to-project/{project}', [ProjectController::class, 'moveTaskToProject'])->middleware('auth:sanctum');
 
 Route::post('/projects/{project}/add-task-to-project', [ProjectController::class, 'addTaskToProject'])->middleware('auth:sanctum');

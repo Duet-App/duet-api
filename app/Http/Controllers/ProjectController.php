@@ -55,6 +55,14 @@ class ProjectController extends Controller
         return ['project' => $project];
     }
 
+    public function fetchCompletedTasks(Project $project) {
+        $project = Project::with(['tasks' => function (Builder $query) {
+            $query->where('status', 'D')->orWhere('status', 'C')->orderBy('completed_on', 'desc');
+        }, 'tasks.tags', 'notes'])->find($project->id);
+        // $project = Project::find($project->id);
+        return ['project' => $project];
+    }
+
     public function moveTaskToProject(Task $task, Project $project) {
         $task->project_id = $project->id;
         $task->save();
