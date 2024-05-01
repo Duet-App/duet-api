@@ -14,6 +14,11 @@ class NoteController extends Controller
         return ['notes' => $notes];
     }
 
+    public function getDashboardNotes() {
+        $notes = auth()->user()->notes()->orderBy('updated_at', 'desc')->take(3)->get();
+        return ['notes' => $notes];
+    }
+
     public function show(Note $note) {
         $note = Note::with(['project'])->find($note->id);
         return ['note' => $note];

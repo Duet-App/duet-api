@@ -101,6 +101,8 @@ Route::post('/tags/add-to-task', [TaskController::class, 'addTagsToTask'])->midd
 
 Route::get('/notes/', [NoteController::class, 'getNotes'])->middleware('auth:sanctum')->middleware('etag');
 
+Route::get('/notes/dashboard', [NoteController::class, 'getDashboardNotes'])->middleware('auth:sanctum')->middleware('etag');
+
 Route::get('/notes/{note}', [NoteController::class, 'show'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/notes/add', [NoteController::class, 'create'])->middleware('auth:sanctum');
