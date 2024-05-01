@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 class NoteController extends Controller
 {
     public function getNotes() {
-        $notes = auth()->user()->notes()->with(['project'])->get();
+        $notes = auth()->user()->notes()->with(['project'])->orderBy('updated_at', 'desc')->get();
         return ['notes' => $notes];
     }
 
