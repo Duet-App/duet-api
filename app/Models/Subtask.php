@@ -16,6 +16,6 @@ class Subtask extends Model
     }
 
     public function task() {
-        return $this->belongsTo(Subtask::class);
+        return $this->belongsTo(Task::class);
     }
 }
