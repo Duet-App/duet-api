@@ -67,6 +67,8 @@ Route::post('/tasks/{task}/subtasks/reorder', [TaskController::class, 'reorderSu
 
 Route::put('/tasks/{task}/subtasks/{subtask}/toggle-complete', [TaskController::class, 'toggleCompleteSubtask'])->middleware('auth:sanctum');
 
+Route::put('/tasks/{task}/subtasks/toggle-bulk-complete', [TaskController::class, 'toggleMultipleSubtasksAsComplete'])->middleware('auth:sanctum');
+
 Route::put('/tasks/{task}/subtasks/{subtask}/edit', [TaskController::class, 'updateSubtask'])->middleware('auth:sanctum');
 
 Route::delete('/tasks/{task}/subtasks/{subtask}/delete', [TaskController::class, 'deleteSubtask'])->middleware('auth:sanctum');

@@ -190,6 +190,16 @@ class TaskController extends Controller
         return ['success' => '1'];
     }
 
+    public function toggleMultipleSubtasksAsComplete(Task $task, Request $request) {
+        $subtasks = Subtask::whereIn('id', $request->subtaskIds)->get();
+        // $subtasks->update(['is_complete' => ($this->is_complete == 1) ? 0 : 1]);
+        $subtasks->each(function ($item, $key) {
+            $item->is_complete = ($item->is_complete == 1) ? 0 : 1;
+            $item->save();
+        });
+        return ['success' => '1'];
+    }
+
     public function updateSubtask(Task $task, Subtask $subtask, Request $request) {
         $subtask->title = $request->title;
         $subtask->save();
