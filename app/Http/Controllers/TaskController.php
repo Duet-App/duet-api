@@ -135,6 +135,9 @@ class TaskController extends Controller
         }
         $task->save();
         $task->refresh();
+        $task = Task::with(['project', 'tags', 'subtasks' => function($q) {
+            $q->orderBy('order', 'asc');
+        }])->find($task->id);
         return ['success' => '1', 'task' => $task];
     }
 
