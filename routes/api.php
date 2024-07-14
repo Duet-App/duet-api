@@ -75,6 +75,8 @@ Route::delete('/tasks/{task}/subtasks/{subtask}/delete', [TaskController::class,
 
 Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware('auth:sanctum')->middleware('etag');
 
+Route::get('/projects/archived', [ProjectController::class, 'getArchivedProjects'])->middleware('auth:sanctum')->middleware('etag');
+
 Route::get('/projects/dashboard', [ProjectController::class, 'getDashboardProjects'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('auth:sanctum');
