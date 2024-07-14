@@ -30,6 +30,16 @@ class ProjectController extends Controller
         return ['projects' => $projects];
     }
 
+    public function getCompletedProjects() {
+        $projects = auth()->user()->projects()->withCount([
+            'tasks',
+            'tasks as completed_tasks' => function (Builder $query) {
+                $query->where('status', 'C')->orWhere('status', 'D');
+            }
+        ])->where('isComplete', true)->where('is_archived', false)->orderBy('updated_at', 'desc')->get();
+        return ['projects' => $projects];
+    }
+
     public function getDashboardProjects() {
         $projects = auth()->user()->projects()->withCount([
             'tasks',

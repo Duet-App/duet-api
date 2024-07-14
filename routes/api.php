@@ -77,6 +77,8 @@ Route::get('/projects/', [ProjectController::class, 'getProjects'])->middleware(
 
 Route::get('/projects/archived', [ProjectController::class, 'getArchivedProjects'])->middleware('auth:sanctum')->middleware('etag');
 
+Route::get('/projects/completed', [ProjectController::class, 'getCompletedProjects'])->middleware('auth:sanctum')->middleware('etag');
+
 Route::get('/projects/dashboard', [ProjectController::class, 'getDashboardProjects'])->middleware('auth:sanctum')->middleware('etag');
 
 Route::post('/projects/add', [ProjectController::class, 'create'])->middleware('auth:sanctum');
