@@ -97,6 +97,8 @@ Route::post('/projects/{project}/complete', [ProjectController::class, 'toggleAs
 
 Route::post('/projects/{project}/archive', [ProjectController::class, 'toggleArchive'])->middleware('auth:sanctum');
 
+Route::get('/projects/{project}/export-to-duet-pouchdb', [ProjectController::class, 'exportToDuetPouchDB'])->middleware('auth:sanctum');
+
 Route::put('/tasks/{task}/toggle-today', [TaskController::class, 'toggleToday'])->middleware('auth:sanctum');
 
 Route::get('/tags/', [TagController::class, 'index'])->middleware('auth:sanctum')->middleware('etag');

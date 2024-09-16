@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -129,5 +130,92 @@ class ProjectController extends Controller
         $project->is_archived = ($project->is_archived == 1) ? 0 : 1;
         $project->save();
         return ['success' => '1'];
+    }
+
+    public function exportToDuetPouchDB(Project $project, Request $request) {
+
+        // Fetch all the project items
+        $currentProject = Project::with(['tasks', 'tasks.tags', 'notes', 'tasks.subtasks'])->find($project->id);
+
+        // Generate the Project UUID to construct the export JSON
+        $projectId = (string) Str::uuid();
+
+        // Create the array that will be exported
+        $exportProject = [];
+
+        // Add the project ID
+        $exportProject["_id"] = $projectId;
+
+        // Add project meta
+        $exportProject["title"] = $currentProject->title;
+        $exportProject["description"] = $currentProject->description;
+        $exportProject["timestamps"] = [
+            "created" => $currentProject->created_at,
+            "updated" => $currentProject->updated_at,
+        ];
+        $exportProject["status"] = "In progress";
+        $exportProject["type"] = "project";
+        $exportProject["tasks"] = [];
+        $exportProject["notes"] = [];
+
+        // Create array for task
+        $exportTasks = [];
+
+        // Add project tasks
+        foreach($currentProject->tasks as $i => $currentTask) {
+            $taskId = (string) Str::uuid();
+            $task = [];
+            $task["_id"] = $taskId;
+            $task["type"] = "task";
+            $task["title"] = $currentTask->title;
+            $task["description"] = $currentTask->description;
+            $task["status"] = $currentTask->status == "T" ? "Todo" : ( $currentTask->status == "N" ? "Next" : ( $currentTask->status == "W" ? "Waiting" : ( $currentTask->status == "D" ? "Done" : ($currentTask->status == "C" ? "Cancelled" : "Todo") ) ) );
+            $task["due_date"] = $currentTask->due_date;
+            $task["scheduled_date"] = $currentTask->scheduled_date;
+            $task["timestamps"] = [
+                "created" => $currentTask->created_at,
+                "updated" => $currentTask->updated_at,
+                "completed" => $currentTask->status == "D" || $currentTask->status == "C" ? $currentTask->completed_on : null
+            ];
+            $task["subtasks"] = [];
+            foreach($currentTask->subtasks as $j => $currentSubtask) {
+                $subtask = [];
+                $subtask["id"] = (string) Str::uuid();
+                $subtask["title"] = $currentSubtask->title;
+                $subtask["order"] = $j + 1;
+                $subtask["complete"] = $currentSubtask->is_complete == 0 ? false : true;
+                array_push($task["subtasks"], $subtask);
+            }
+            array_push($exportProject["tasks"], $taskId);
+            $task["tags"] = [];
+            foreach($currentTask->tags as $tag) {
+                array_push($task["tags"], $tag->title);
+            }
+            $task["project_id"] = $projectId;
+            array_push($exportTasks, $task);
+        }
+
+        // Create array for notes
+        $exportNotes = [];
+
+        // Add project notes
+        foreach($currentProject->notes as $i => $currentNote) {
+            $noteId = (string) Str::uuid();
+            $note = [];
+            $note["_id"] = $noteId;
+            $note["type"] = "note";
+            $note["title"] = $currentNote->title;
+            $note["description"] = $currentNote->contents;
+            $note["timestamps"] = [
+                "created" => $currentNote->created_at,
+                "updated" => $currentNote->updated_at
+            ];
+            array_push($exportProject["notes"], $noteId);
+            $note["project_id"] = $projectId;
+            array_push($exportNotes, $note);
+        }
+
+        // Return the constructed array as JSON
+        return array_merge(array_merge([$exportProject], $exportTasks), $exportNotes);
     }
 }
